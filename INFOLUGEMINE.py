@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+import random
 
 
 def is_fastest_lap(driver_name, fastest_data):
@@ -8,12 +8,19 @@ def is_fastest_lap(driver_name, fastest_data):
         return ""
 
 
-def sec2time(sec):
+def sec2time(sec, n_msec=3):
     if hasattr(sec, '__len__'):
         return [sec2time(s) for s in sec]
-    d = datetime(1, 1, 1) + timedelta(seconds=sec)
-    time_format = "%H:%M:%S.%f" if d.microsecond else "%H:%M:%S"
-    return d.strftime(time_format)
+    m, s = divmod(sec, 60)
+    h, m = divmod(m, 60)
+    d, h = divmod(h, 24)
+    if n_msec > 0:
+        pattern = '%%02d:%%02d:%%0%d.%df' % (n_msec + 3, n_msec)
+    else:
+        pattern = r'%02d:%02d:%02d'
+    if d == 0:
+        return pattern % (h, m, s)
+    return ('%d days, ' + pattern) % (d, h, m, s)
 
 
 if __name__ == '__main__':
@@ -77,7 +84,7 @@ if __name__ == '__main__':
 
         rank += 1
 
-    print('Sektori parimad')
+    print('\nSektori parimad')
     total = sum(driver[1] for driver in three_sektors)
     for idx, driver in enumerate(three_sektors):
         print('Sektor', (idx + 1), driver[0].ljust(10), sec2time(driver[1]))
