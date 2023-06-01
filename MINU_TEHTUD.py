@@ -57,5 +57,6 @@ with open("Result.txt", mode="w", newline="") as file:
             s1, s2, s3 = sector
             formatted_time = format_time(lap_time)
             writer.writerow([i, racer, formatted_time, s1, s2, s3, error])
+            print(f"Racer: {racer}, Lap: {i}, Lap Time: {formatted_time}, Sector Times: {s1}, {s2}, {s3}, Error: {error}")
 
-print("Andmed on salvestatud CSV-faili 'Result.txt'.")
+print("Data has been saved in the CSV file 'Result.txt'.")
