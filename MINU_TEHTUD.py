@@ -1,5 +1,5 @@
-import csv
 import random
+import csv
 
 racers = ['Lewis', 'Valtteri', 'Max', 'Charles', 'Lando']
 alg, lopp = 23, 26
@@ -9,6 +9,14 @@ times = []
 def suvalineaeg(a, b):
     aeg = round(random.uniform(a, b), 3)
     return aeg
+
+
+def format_time(sec):
+    milliseconds = int((sec - int(sec)) * 1000)
+    minutes, seconds = divmod(int(sec), 60)
+    hours, minutes = divmod(minutes, 60)
+
+    return f'{hours:02d}:{minutes:02d}:{seconds:02d}.{milliseconds:03d}'
 
 
 def taisringi_aeg():
@@ -47,7 +55,7 @@ with open("Result.txt", mode="w", newline="") as file:
         total_time, lap_times, sector_times, errors = taisringi_aeg()
         for i, (lap_time, sector, error) in enumerate(zip(lap_times, sector_times, errors), start=1):
             s1, s2, s3 = sector
-            formatted_time = "{:.3f}".format(lap_time)  # Formaatida aeg kolme kohaga peale koma
+            formatted_time = format_time(lap_time)
             writer.writerow([i, racer, formatted_time, s1, s2, s3, error])
 
 print("Andmed on salvestatud CSV-faili 'Result.txt'.")
