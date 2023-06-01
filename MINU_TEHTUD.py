@@ -12,11 +12,7 @@ def suvalineaeg(a, b):
 
 
 def format_time(sec):
-    milliseconds = int((sec - int(sec)) * 1000)
-    minutes, seconds = divmod(int(sec), 60)
-    hours, minutes = divmod(minutes, 60)
-
-    return f'{hours:02d}:{minutes:02d}:{seconds:02d}.{milliseconds:03d}'
+    return str(sec)
 
 
 def taisringi_aeg():
