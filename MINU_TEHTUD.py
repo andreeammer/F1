@@ -1,9 +1,10 @@
 import random
 import csv
+import os
 
 drivers = ['Lewis', 'Valtteri', 'Max', 'Charles', 'Lando']
 laps = 10
-filename = 'Result.csv'
+filename = 'Result.txt'
 file_header = ['Ring', 'Nimi', 'Aeg', 'Sektor1', 'Sektor2', 'Sektor3', 'Viga']
 results = []
 minimum_sector_time = 23
@@ -54,9 +55,11 @@ def format_time(seconds, num_milliseconds=3):
 
 
 if __name__ == '__main__':
-    with open(filename, 'w', encoding='utf-8', newline='') as file:
+    mode = 'a' if os.path.exists(filename) else 'w'
+    with open(filename, mode, encoding='utf-8', newline='') as file:
         writer = csv.writer(file, delimiter=';')
-        writer.writerow(file_header)
+        if mode == 'w':
+            writer.writerow(file_header)
         for driver in drivers:
             lap_time_total = 0
             error_laps = []
