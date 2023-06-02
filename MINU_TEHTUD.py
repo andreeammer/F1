@@ -1,4 +1,4 @@
-import csv
+import random
 
 def sec2time(sec, n_msec=3):
     if hasattr(sec, '__len__'):
@@ -30,41 +30,56 @@ if __name__ == '__main__':
     lap_times = {}
     lap_errors = {}
 
-    with open(Filename, 'r', encoding='utf-8') as file:
-        lines = file.readlines()
-        File_header = lines[0]
-        for line in lines[1:]:
-            data = line.strip().split(';')
-            lap = int(data[0])
-            name = data[1]
-            lap_time = float(data[2])
-            sector1 = float(data[3])
-            sector2 = float(data[4])
-            sector3 = float(data[5])
-            error = True if data[6].lower() == 'true' else False
-            if lap_time < fastest_lap[1]:
-                fastest_lap[0] = name
-                fastest_lap[1] = lap_time
-            if sector1 < three_sektors[0][1]:
-                three_sektors[0][0] = name
-                three_sektors[0][1] = sector1
-            if sector2 < three_sektors[1][1]:
-                three_sektors[1][0] = name
-                three_sektors[1][1] = sector2
-            if sector3 < three_sektors[2][1]:
-                three_sektors[2][0] = name
-                three_sektors[2][1] = sector3
+    try:
+        with open(Filename, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+            File_header = lines[0]
+            for line in lines[1:]:
+                data = line.strip().split(';')
+                lap = int(data[0])
+                name = data[1]
+                lap_time = float(data[2])
+                sector1 = float(data[3])
+                sector2 = float(data[4])
+                sector3 = float(data[5])
+                error = True if data[6].lower() == 'true' else False
+                if lap_time < fastest_lap[1]:
+                    fastest_lap[0] = name
+                    fastest_lap[1] = lap_time
+                if sector1 < three_sektors[0][1]:
+                    three_sektors[0][0] = name
+                    three_sektors[0][1] = sector1
+                if sector2 < three_sektors[1][1]:
+                    three_sektors[1][0] = name
+                    three_sektors[1][1] = sector2
+                if sector3 < three_sektors[2][1]:
+                    three_sektors[2][0] = name
+                    three_sektors[2][1] = sector3
 
-            if name not in lap_times:
-                lap_times[name] = 0
-            lap_times[name] += lap_time
+                if name not in lap_times:
+                    lap_times[name] = 0
+                lap_times[name] += lap_time
 
-            if error:
-                if name not in lap_errors:
-                    lap_errors[name] = []
-                lap_errors[name].append(lap)
+                if error:
+                    if name not in lap_errors:
+                        lap_errors[name] = []
+                    lap_errors[name].append(lap)
 
-            results.append([name, lap_time, error])
+                results.append([name, lap_time, error])
+
+    except FileNotFoundError:
+        print(f"Faili {Filename} ei leitud. Luuakse uus fail.")
+
+        with open(Filename, 'w', encoding='utf-8') as file:
+            file.write("Lap;Driver;Time;Sector 1;Sector 2;Sector 3;Error\n")
+            for lap in range(1, 11):
+                driver = f"Driver {lap}"
+                lap_time = round(random.uniform(60, 120), 3)
+                sector1 = round(random.uniform(10, 20), 3)
+                sector2 = round(random.uniform(20, 30), 3)
+                sector3 = round(random.uniform(30, 40), 3)
+                error = random.choice([True, False])
+                file.write(f"{lap};{driver};{lap_time};{sector1};{sector2};{sector3};{error}\n")
 
     lap_times = sorted(lap_times.items(), key=lambda x: x[1])
 
